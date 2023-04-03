@@ -1,0 +1,54 @@
+class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
+    private lateinit var textView: TextView
+    private lateinit var gestureDetector: GestureDetector
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        textView = findViewById(R.id.textView)
+        gestureDetector = GestureDetector(this, this)
+
+        textView.text = "0"
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gestureDetector.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
+
+    override fun onDown(e: MotionEvent?): Boolean {
+        return true
+    }
+
+    override fun onShowPress(e: MotionEvent?) {}
+
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        return true
+    }
+
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent?,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        if (distanceY > 0) {
+            textView.text = (textView.text.toString().toInt() + 1).toString()
+        } else if (distanceY < 0) {
+            textView.text = (textView.text.toString().toInt() - 1).toString()
+        }
+        return true
+    }
+
+    override fun onLongPress(e: MotionEvent?) {}
+
+    override fun onFling(
+        e1: MotionEvent?,
+        e2: MotionEvent?,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
+        return true
+    }
+}
