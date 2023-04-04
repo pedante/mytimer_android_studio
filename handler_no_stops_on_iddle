@@ -1,0 +1,41 @@
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
+    private var seconds = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Initialize Handler and Runnable
+        handler = Handler(Looper.getMainLooper())
+        runnable = object : Runnable {
+            override fun run() {
+                seconds++
+                handler.postDelayed(this, 1000)
+            }
+        }
+
+        // Start timer
+        handler.postDelayed(runnable, 1000)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        // Stop timer when activity is paused
+        handler.removeCallbacks(runnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Resume timer when activity is resumed
+        handler.postDelayed(runnable, 1000 * (60 - seconds % 60))
+    }
+}
