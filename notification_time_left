@@ -1,0 +1,30 @@
+val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+val notificationId = 1
+val channelId = "channel-01"
+val channelName = "Timer"
+val importance = NotificationManager.IMPORTANCE_HIGH
+val notificationChannel = NotificationChannel(channelId, channelName, importance)
+notificationManager.createNotificationChannel(notificationChannel)
+
+val builder = NotificationCompat.Builder(this, channelId)
+    .setSmallIcon(R.drawable.ic_launcher_foreground)
+    .setContentTitle("Timer")
+    .setContentText("Your timer is running...")
+    .setPriority(NotificationCompat.PRIORITY_HIGH)
+    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+
+var timerValue = 50 // Replace this with your timer value
+
+val handler = Handler()
+handler.post(object : Runnable {
+    override fun run() {
+        builder.setContentText("Time left: $timerValue seconds")
+        notificationManager.notify(notificationId, builder.build())
+        if (timerValue > 0) {
+            timerValue--
+            handler.postDelayed(this, 1000)
+        }
+    }
+})
+
+notificationManager.notify(notificationId, builder.build())
